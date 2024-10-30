@@ -14,6 +14,4 @@
     <div>
         {!! $dropdown !!}
     </div>
-
-    <br />
 </div>
