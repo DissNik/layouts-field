@@ -8,9 +8,11 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 use MoonShine\AssetManager\Js;
+use MoonShine\Contracts\Core\HasComponentsContract;
 use MoonShine\Contracts\Core\PageContract;
 use MoonShine\Contracts\Core\ResourceContract;
 use MoonShine\Contracts\UI\ActionButtonContract;
+use MoonShine\Contracts\UI\Collection\ComponentsContract;
 use MoonShine\Contracts\UI\HasFieldsContract;
 use MoonShine\Layouts\Casts\LayoutItem;
 use MoonShine\Layouts\Casts\LayoutsCast;
@@ -169,9 +171,15 @@ final class Layouts extends Field
         return LayoutCollection::make($filled);
     }
 
-    private function fillClonedRecursively(Collection $collection, mixed $data): Collection
+    private function fillClonedRecursively(ComponentsContract|Collection $collection, mixed $data): Collection
     {
         return $collection->map(function (mixed $item) use ($data) {
+            if ($item instanceof HasComponentsContract) {
+                $item = (clone $item)->setComponents(
+                    $this->fillClonedRecursively($item->getComponents(), $data)->toArray()
+                );
+            }
+
             if ($item instanceof HasFieldsContract) {
                 $item = (clone $item)->fields(
                     $this->fillClonedRecursively($item->getFields(), $data)->toArray()

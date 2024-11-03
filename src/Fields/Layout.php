@@ -129,8 +129,6 @@ final class Layout implements LayoutContract
                 FlexibleRender::make($this->title()),
 
                 ...$this->getHeadingAdditionalFields(),
-
-                $this->getRemoveButton(),
             ]))
                 ->customAttributes(['class' => 'w-full'])
                 ->itemsAlign('center')
@@ -188,6 +186,7 @@ final class Layout implements LayoutContract
         return view('moonshine-layouts-field::layout', [
             'key' => $this->key(),
             'heading' => FieldsGroup::make($this->headingFields()),
+            'button' => $this->getRemoveButton(),
             'fields' => FieldsGroup::make($this->fields()),
         ]);
     }
