@@ -50,7 +50,7 @@ final class Layouts extends Field
 
     private ?PageContract $page = null;
 
-    public function getAssets(): array
+    protected function assets(): array
     {
         return [
             Js::make('/vendor/moonshine-layouts-field/js/layouts.js'),
